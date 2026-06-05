@@ -1,26 +1,42 @@
 <script setup lang="ts">
+import { watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const props = defineProps<{ open: boolean }>()
+const emit = defineEmits<{ close: [] }>()
+
+const route = useRoute()
+
+watch(
+  () => route.path,
+  () => emit('close'),
+)
+
 const navigation = [
   {
     group: 'Démarrage',
-    items: [{ path: '/', label: 'Accueil' }],
+    items: [{ path: '/', label: 'Accueil', icon: '⌂' }],
   },
   {
     group: 'Composants',
     items: [
-      { path: '/props', label: 'Props' },
-      { path: '/emits', label: 'Emits' },
-      { path: '/slots', label: 'Slots' },
+      { path: '/props', label: 'Props', icon: '↓' },
+      { path: '/emits', label: 'Emits', icon: '↑' },
+      { path: '/slots', label: 'Slots', icon: '◈' },
     ],
   },
 ]
 </script>
 
 <template>
-  <aside class="sidebar">
+  <aside :class="['sidebar', { 'sidebar--open': props.open }]">
     <div class="sidebar__brand">
       <span class="sidebar__logo">DejaVue</span>
-      <span class="sidebar__tagline">Vue 3 · TypeScript</span>
+      <button class="sidebar__close" aria-label="Fermer le menu" @click="emit('close')">
+        ✕
+      </button>
     </div>
+    <span class="sidebar__tagline">Vue 3 · TypeScript</span>
 
     <nav class="sidebar__nav">
       <div v-for="section in navigation" :key="section.group" class="sidebar__group">
@@ -32,6 +48,7 @@ const navigation = [
           class="sidebar__link"
           exact-active-class="sidebar__link--active"
         >
+          <span class="sidebar__link-icon" aria-hidden="true">{{ item.icon }}</span>
           {{ item.label }}
         </RouterLink>
       </div>
@@ -65,24 +82,41 @@ const navigation = [
 }
 
 .sidebar__brand {
-  padding: 1.5rem 1.25rem 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.25rem 0.25rem;
 }
 
 .sidebar__logo {
-  display: block;
   font-size: 1.2rem;
   font-weight: 800;
   color: var(--vue);
   letter-spacing: -0.03em;
 }
 
+.sidebar__close {
+  display: none;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1rem;
+  padding: 0.25rem;
+  line-height: 1;
+  transition: color 0.12s;
+}
+
+.sidebar__close:hover {
+  color: #fff;
+}
+
 .sidebar__tagline {
   display: block;
   font-size: 0.62rem;
   color: rgba(255, 255, 255, 0.28);
-  margin-top: 0.25rem;
+  padding: 0 1.25rem 1.25rem;
   font-family: var(--mono);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .sidebar__nav {
@@ -107,6 +141,7 @@ const navigation = [
 .sidebar__link {
   display: flex;
   align-items: center;
+  gap: 0.6rem;
   padding: 0.45rem 0.75rem;
   border-radius: 6px;
   font-size: 0.845rem;
@@ -126,6 +161,13 @@ const navigation = [
   font-weight: 600;
 }
 
+.sidebar__link-icon {
+  font-size: 0.75rem;
+  opacity: 0.55;
+  width: 1rem;
+  text-align: center;
+}
+
 .sidebar__footer {
   padding: 1rem 1.25rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -139,5 +181,26 @@ const navigation = [
 
 .sidebar__footer-link:hover {
   color: var(--vue);
+}
+
+/* ── Mobile ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar--open {
+    transform: translateX(0);
+  }
+
+  .sidebar__close {
+    display: block;
+  }
 }
 </style>

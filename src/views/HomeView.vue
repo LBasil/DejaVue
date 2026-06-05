@@ -3,59 +3,95 @@ const topics = [
   {
     path: '/props',
     label: 'Props',
-    glyph: '↓',
-    description: 'defineProps, withDefaults, interface types, union types',
+    icon: '↓',
+    color: '#3b82f6',
+    tagline: 'Parent → Enfant',
+    description:
+      'Passe des données typées à tes composants. Apprends defineProps, withDefaults et les interfaces TypeScript.',
+    tags: ['defineProps', 'withDefaults', 'interface'],
   },
   {
     path: '/emits',
     label: 'Emits',
-    glyph: '↑',
-    description: 'defineEmits typés, v-model custom avec defineModel',
+    icon: '↑',
+    color: '#f59e0b',
+    tagline: 'Enfant → Parent',
+    description:
+      "Remonte des événements typés depuis un composant enfant. v-model custom avec defineModel en une ligne.",
+    tags: ['defineEmits', 'defineModel', 'v-model'],
   },
   {
     path: '/slots',
     label: 'Slots',
-    glyph: '◈',
-    description: 'Slots nommés, slots scopés, guard $slots',
+    icon: '◈',
+    color: '#8b5cf6',
+    tagline: 'Composition de contenu',
+    description:
+      'Injecte du HTML dans un composant depuis le parent. Slots nommés, scopés, et guards $slots.',
+    tags: ['#named', 'v-slot', '$slots'],
   },
 ]
 </script>
 
 <template>
-  <div>
-    <header class="home-header">
-      <div class="home-header__badge">Vue 3 · TypeScript · Vite</div>
-      <h1 class="home-header__title">DejaVue</h1>
-      <p class="home-header__subtitle">
-        Référentiel interactif de patterns Vue 3 — composants, réactivité, composables.
-        Chaque section propose des démos en direct et le code source correspondant.
+  <div class="home">
+    <header class="hero">
+      <div class="hero__badge">Vue 3 · TypeScript · Vite</div>
+      <h1 class="hero__title">DejaVue.</h1>
+      <p class="hero__subtitle">
+        Un terrain de jeu personnel pour maîtriser Vue 3 + TypeScript.<br />
+        Des composants vrais. Du code réel. Des démos vivantes.
       </p>
+      <RouterLink to="/props" class="hero__cta">
+        Commencer par les Props <span aria-hidden="true">→</span>
+      </RouterLink>
     </header>
 
-    <div class="topics-grid">
+    <div class="topics">
       <RouterLink
         v-for="topic in topics"
         :key="topic.path"
         :to="topic.path"
         class="topic-card"
+        :style="{ '--accent': topic.color }"
       >
-        <span class="topic-card__glyph">{{ topic.glyph }}</span>
+        <div class="topic-card__top">
+          <span class="topic-card__icon" aria-hidden="true">{{ topic.icon }}</span>
+          <span class="topic-card__tagline">{{ topic.tagline }}</span>
+        </div>
         <h2 class="topic-card__label">{{ topic.label }}</h2>
         <p class="topic-card__desc">{{ topic.description }}</p>
-        <span class="topic-card__arrow">→</span>
+        <div class="topic-card__tags">
+          <code v-for="tag in topic.tags" :key="tag" class="topic-card__tag">{{ tag }}</code>
+        </div>
+        <div class="topic-card__footer">
+          Explorer <span aria-hidden="true">→</span>
+        </div>
       </RouterLink>
     </div>
+
+    <footer class="home-footer">
+      <p>Vue = français pour <em>"vue"</em>. Le framework qui te laisse voir ce qui se passe.</p>
+    </footer>
   </div>
 </template>
 
 <style scoped>
-.home-header {
-  margin-bottom: 3rem;
+.home {
+  animation: fade-up 0.4s ease both;
 }
 
-.home-header__badge {
-  display: inline-block;
-  font-size: 0.7rem;
+/* ── Hero ───────────────────────────────────────────── */
+.hero {
+  margin-bottom: 3rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.68rem;
   font-family: var(--mono);
   font-weight: 600;
   color: var(--vue);
@@ -65,31 +101,58 @@ const topics = [
   border-radius: 9999px;
   margin-bottom: 1.25rem;
   letter-spacing: 0.04em;
+  animation: fade-up 0.4s ease both;
 }
 
-.home-header__title {
-  font-size: 2.75rem;
+.hero__title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
   font-weight: 900;
   letter-spacing: -0.05em;
-  color: var(--text);
   margin-bottom: 0.875rem;
-  background: linear-gradient(135deg, var(--text) 40%, var(--vue));
+  background: linear-gradient(135deg, var(--text) 30%, var(--vue) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: fade-up 0.4s ease 0.05s both;
+  line-height: 1.1;
 }
 
-.home-header__subtitle {
-  font-size: 0.95rem;
+.hero__subtitle {
+  font-size: 1rem;
   color: var(--text-muted);
-  max-width: 520px;
-  line-height: 1.7;
+  line-height: 1.75;
+  margin-bottom: 1.75rem;
+  max-width: 480px;
+  animation: fade-up 0.4s ease 0.1s both;
 }
 
-.topics-grid {
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--vue);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+  animation: fade-up 0.4s ease 0.15s both;
+}
+
+.hero__cta:hover {
+  background: #38a374;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(66, 184, 131, 0.3);
+}
+
+/* ── Topic cards ────────────────────────────────────── */
+.topics {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1rem;
+  margin-bottom: 3rem;
+  animation: fade-up 0.4s ease 0.2s both;
 }
 
 .topic-card {
@@ -98,47 +161,122 @@ const topics = [
   padding: 1.5rem;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   box-shadow: var(--shadow);
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
   position: relative;
+  overflow: hidden;
+}
+
+.topic-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.15s;
 }
 
 .topic-card:hover {
-  border-color: var(--vue);
-  box-shadow: 0 4px 16px rgba(66, 184, 131, 0.12);
-  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
 }
 
-.topic-card__glyph {
+.topic-card:hover::before {
+  opacity: 1;
+}
+
+.topic-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.topic-card__icon {
   font-size: 1.5rem;
-  line-height: 1;
-  margin-bottom: 0.875rem;
-  color: var(--vue);
+  color: var(--accent);
+}
+
+.topic-card__tagline {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
 }
 
 .topic-card__label {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
   color: var(--text);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .topic-card__desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  flex: 1;
+  margin-bottom: 1rem;
+}
+
+.topic-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+.topic-card__tag {
+  font-size: 0.65rem;
+  font-family: var(--mono);
+  background: #f1f5f9;
+  color: var(--text-muted);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.topic-card__footer {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  transition: gap 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.topic-card:hover .topic-card__footer {
+  gap: 0.6rem;
+}
+
+/* ── Footer ─────────────────────────────────────────── */
+.home-footer {
+  text-align: center;
   font-size: 0.78rem;
   color: var(--text-muted);
-  line-height: 1.6;
-  flex: 1;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border);
+  animation: fade-up 0.4s ease 0.25s both;
 }
 
-.topic-card__arrow {
-  margin-top: 1rem;
-  font-size: 0.9rem;
+.home-footer em {
+  font-style: italic;
   color: var(--vue);
-  transition: transform 0.12s;
 }
 
-.topic-card:hover .topic-card__arrow {
-  transform: translateX(3px);
+@media (max-width: 640px) {
+  .topics {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
