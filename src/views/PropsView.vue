@@ -6,25 +6,26 @@ import AppBadge from '../components/demos/props/AppBadge.vue'
 import UserCard from '../components/demos/props/UserCard.vue'
 import AppBadgeSource from '../components/demos/props/AppBadge.vue?raw'
 import UserCardSource from '../components/demos/props/UserCard.vue?raw'
+import { useLevel } from '../composables/useLevel'
 
 type Variant = 'success' | 'warning' | 'danger' | 'info'
 type Size = 'sm' | 'md' | 'lg'
 type Status = 'online' | 'away' | 'offline'
 
-/* ── AppBadge controls ──────────────────────────────── */
+const { advanced } = useLevel()
+
 const badgeVariant = ref<Variant>('success')
 const badgeSize = ref<Size>('md')
 const badgeDot = ref(true)
 
-/* ── Profile builder ────────────────────────────────── */
 const cardName = ref('Basil Lhote')
 const cardRole = ref('Lead Developer')
 const cardStatus = ref<Status>('online')
 const cardVerified = ref(true)
 
 const statuses: { value: Status; label: string; color: string }[] = [
-  { value: 'online', label: 'En ligne', color: '#22c55e' },
-  { value: 'away', label: 'Absent', color: '#f59e0b' },
+  { value: 'online',  label: 'En ligne',   color: '#22c55e' },
+  { value: 'away',    label: 'Absent',     color: '#f59e0b' },
   { value: 'offline', label: 'Hors ligne', color: '#94a3b8' },
 ]
 </script>
@@ -34,30 +35,36 @@ const statuses: { value: Status; label: string; color: string }[] = [
     <header class="page-header">
       <h1 class="page-title">Props</h1>
       <p class="page-subtitle">
-        Communication <strong>parent → enfant</strong>. Le parent passe des données,
-        l'enfant les affiche — jamais l'inverse. C'est le flux de données à sens unique
-        de Vue.
+        Les props font descendre des données depuis un composant parent vers ses enfants.
+        Toujours dans ce sens, jamais l'inverse. L'enfant reçoit, affiche, mais ne modifie pas.
       </p>
     </header>
 
-    <!-- ── AppBadge ──────────────────────────────────── -->
+    <!-- ── Section 1 : AppBadge ──────────────────────── -->
     <section class="section">
-      <h2 class="section-title">Union types + withDefaults</h2>
+      <h2 class="section-title">Typer ses props avec des union types</h2>
       <p class="section-text">
-        Avec <code>defineProps&lt;T&gt;()</code>, TypeScript sait exactement ce que
-        le composant accepte. <code>withDefaults</code> définit les valeurs par défaut
-        sans sacrifier la sûreté de type.
+        <code>defineProps&lt;T&gt;()</code> infère les types directement depuis TypeScript.
+        Pas de doublons, pas d'objet de validation séparé. <code>withDefaults</code> s'occupe
+        des valeurs par défaut sans casser l'inférence.
       </p>
 
       <ConceptCallout type="tip">
-        <code>withDefaults</code> est équivalent à <code>default:</code> dans l'Options
-        API, mais en TypeScript pur — pas besoin de répéter les types dans un objet
-        séparé.
+        <code>withDefaults</code> n'est utile que si tu as des valeurs par défaut.
+        Si toutes tes props sont required, <code>defineProps&lt;T&gt;()</code> seul suffit.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="advanced" type="info" title="Sous le capot">
+        <code>defineProps</code> est une macro compilée par le SFC compiler — elle
+        n'existe pas dans le bundle final. Vue la transforme en options classiques :
+        <code>props: { label: { type: String, required: true } }</code>. En dev,
+        Vue génère des validateurs runtime qui t'avertissent si tu passes le mauvais type.
+        Ces validateurs sont retirés en production.
       </ConceptCallout>
 
       <DemoBlock
         title="AppBadge.vue"
-        description="Variant, size, dot — props typées avec union types littéraux."
+        description="Variant, size, dot — union types + withDefaults."
         :code="AppBadgeSource"
       >
         <div class="demo-panel">
@@ -86,61 +93,54 @@ const statuses: { value: Status; label: string; color: string }[] = [
             </div>
             <div class="control-item">
               <span class="control-label">dot</span>
-              <button class="btn-toggle" @click="badgeDot = !badgeDot">
-                {{ badgeDot }}
-              </button>
+              <button class="btn-toggle" @click="badgeDot = !badgeDot">{{ badgeDot }}</button>
             </div>
           </div>
           <div class="preview">
-            <AppBadge
-              label="Statut actif"
-              :variant="badgeVariant"
-              :size="badgeSize"
-              :dot="badgeDot"
-            />
+            <AppBadge label="Statut actif" :variant="badgeVariant" :size="badgeSize" :dot="badgeDot" />
           </div>
         </div>
       </DemoBlock>
     </section>
 
-    <!-- ── Profile Builder ───────────────────────────── -->
+    <!-- ── Section 2 : Profile Builder ──────────────── -->
     <section class="section">
-      <h2 class="section-title">Constructeur de profil</h2>
+      <h2 class="section-title">Interface TypeScript + props calculées</h2>
       <p class="section-text">
-        Modifie les champs ci-dessous et observe la carte se mettre à jour en temps
-        réel. C'est exactement ça, les props : le parent contrôle, l'enfant affiche.
+        Quand les props forment un groupe cohérent, une <code>interface</code> nommée est plus
+        lisible qu'un type inline. Remplis le formulaire — chaque champ est une prop de
+        <code>&lt;UserCard&gt;</code>.
       </p>
 
       <ConceptCallout type="why">
-        <strong>Pourquoi des props ?</strong> Parce que les composants doivent rester
-        <em>bêtes</em> — ils affichent ce qu'on leur donne, sans décider eux-mêmes
-        d'où vient la donnée. Ça les rend réutilisables et testables.
+        Pourquoi ne pas utiliser une variable globale plutôt que des props ? Parce qu'un
+        composant avec des props est <strong>prévisible</strong> : mêmes entrées, même
+        rendu, toujours. Facile à tester, facile à réutiliser n'importe où.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="advanced" type="info" title="Réactivité des props">
+        Chaque prop est automatiquement réactive via le système <code>Proxy</code> de
+        Vue 3. Quand le parent change <code>name</code>, Vue détecte la modification,
+        invalide le composant enfant dans le virtual DOM et re-render uniquement
+        ce qui a changé. La prop <code>computed</code> (<code>initials</code> dans
+        UserCard) est recalculée paresseusement — seulement si <code>name</code>
+        a effectivement changé.
       </ConceptCallout>
 
       <DemoBlock
         title="UserCard.vue"
-        description="Interface Props, computed initiales, record de couleurs de statut."
+        description="Interface Props, computed initiales, record de couleurs indexé par status."
         :code="UserCardSource"
       >
         <div class="builder">
           <form class="builder__form" @submit.prevent>
             <div class="field">
-              <label class="field__label" for="name">name</label>
-              <input
-                id="name"
-                v-model="cardName"
-                class="field__input"
-                placeholder="Votre prénom et nom"
-              />
+              <label class="field__label" for="card-name">name</label>
+              <input id="card-name" v-model="cardName" class="field__input" placeholder="Prénom Nom" />
             </div>
             <div class="field">
-              <label class="field__label" for="role">role</label>
-              <input
-                id="role"
-                v-model="cardRole"
-                class="field__input"
-                placeholder="Votre rôle"
-              />
+              <label class="field__label" for="card-role">role</label>
+              <input id="card-role" v-model="cardRole" class="field__input" placeholder="Ton rôle" />
             </div>
             <div class="field">
               <label class="field__label">status</label>
@@ -158,13 +158,10 @@ const statuses: { value: Status; label: string; color: string }[] = [
             </div>
             <div class="field field--inline">
               <label class="field__label">verified</label>
-              <button
-                :class="['verify-toggle', { on: cardVerified }]"
-                @click="cardVerified = !cardVerified"
-              >
+              <button :class="['verify-toggle', { on: cardVerified }]" @click="cardVerified = !cardVerified">
                 <span class="verify-toggle__knob" />
               </button>
-              <span class="field__hint">{{ cardVerified ? '✓ Compte vérifié' : 'Non vérifié' }}</span>
+              <span class="field__hint">{{ cardVerified ? 'Compte vérifié' : 'Non vérifié' }}</span>
             </div>
           </form>
 
@@ -178,8 +175,8 @@ const statuses: { value: Status; label: string; color: string }[] = [
 
           <div class="builder__preview">
             <UserCard
-              :name="cardName || 'Votre Nom'"
-              :role="cardRole || 'Votre Rôle'"
+              :name="cardName || 'Ton Nom'"
+              :role="cardRole || 'Ton Rôle'"
               :status="cardStatus"
               :verified="cardVerified"
             />
@@ -191,7 +188,6 @@ const statuses: { value: Status; label: string; color: string }[] = [
 </template>
 
 <style scoped>
-/* ── Profile Builder ────────────────────────────────── */
 .builder {
   display: flex;
   align-items: center;
@@ -224,7 +220,6 @@ const statuses: { value: Status; label: string; color: string }[] = [
   font-family: var(--mono);
   font-weight: 600;
   color: var(--text-muted);
-  text-transform: lowercase;
 }
 
 .field__hint {
@@ -243,9 +238,7 @@ const statuses: { value: Status; label: string; color: string }[] = [
   outline: none;
 }
 
-.field__input:focus {
-  border-color: var(--vue);
-}
+.field__input:focus { border-color: var(--vue); }
 
 .status-group {
   display: flex;
@@ -272,9 +265,7 @@ const statuses: { value: Status; label: string; color: string }[] = [
   color: var(--text);
 }
 
-.status-btn.active {
-  background: rgba(66, 184, 131, 0.08);
-}
+.status-btn.active { background: rgba(66, 184, 131, 0.08); }
 
 .status-dot {
   width: 0.5rem;
@@ -283,7 +274,6 @@ const statuses: { value: Status; label: string; color: string }[] = [
   flex-shrink: 0;
 }
 
-/* ── Verify toggle ──────────────────────────────────── */
 .verify-toggle {
   width: 2.25rem;
   height: 1.25rem;
@@ -295,9 +285,7 @@ const statuses: { value: Status; label: string; color: string }[] = [
   flex-shrink: 0;
 }
 
-.verify-toggle.on {
-  background: var(--vue);
-}
+.verify-toggle.on { background: var(--vue); }
 
 .verify-toggle__knob {
   position: absolute;
@@ -312,11 +300,8 @@ const statuses: { value: Status; label: string; color: string }[] = [
   display: block;
 }
 
-.verify-toggle.on .verify-toggle__knob {
-  transform: translateX(1rem);
-}
+.verify-toggle.on .verify-toggle__knob { transform: translateX(1rem); }
 
-/* ── Props arrow ────────────────────────────────────── */
 .builder__arrow {
   display: flex;
   flex-direction: column;
@@ -330,7 +315,6 @@ const statuses: { value: Status; label: string; color: string }[] = [
   font-family: var(--mono);
   font-weight: 700;
   color: var(--vue);
-  text-transform: lowercase;
 }
 
 .arrow__track {
@@ -352,14 +336,9 @@ const statuses: { value: Status; label: string; color: string }[] = [
   margin-left: -2px;
 }
 
-.builder__preview {
-  flex-shrink: 0;
-}
+.builder__preview { flex-shrink: 0; }
 
 @media (max-width: 640px) {
-  .builder__arrow {
-    transform: rotate(90deg);
-    margin: 0.5rem auto;
-  }
+  .builder__arrow { transform: rotate(90deg); margin: 0.5rem auto; }
 }
 </style>

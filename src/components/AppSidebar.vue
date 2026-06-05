@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useTheme } from '../composables/useTheme'
+import { useLevel } from '../composables/useLevel'
 
 const props = defineProps<{ open: boolean }>()
 const emit = defineEmits<{ close: [] }>()
 
 const route = useRoute()
+const { dark, toggle: toggleTheme } = useTheme()
+const { advanced, toggle: toggleLevel } = useLevel()
 
-watch(
-  () => route.path,
-  () => emit('close'),
-)
+watch(() => route.path, () => emit('close'))
 
 const navigation = [
   {
@@ -32,9 +33,7 @@ const navigation = [
   <aside :class="['sidebar', { 'sidebar--open': props.open }]">
     <div class="sidebar__brand">
       <span class="sidebar__logo">DejaVue</span>
-      <button class="sidebar__close" aria-label="Fermer le menu" @click="emit('close')">
-        ✕
-      </button>
+      <button class="sidebar__close" aria-label="Fermer" @click="emit('close')">✕</button>
     </div>
     <span class="sidebar__tagline">Vue 3 · TypeScript</span>
 
@@ -55,21 +54,45 @@ const navigation = [
     </nav>
 
     <div class="sidebar__footer">
+      <div class="sidebar__controls">
+        <!-- Niveau -->
+        <div class="control-group">
+          <span class="control-group__label">Niveau</span>
+          <div class="toggle-pair">
+            <button
+              :class="['toggle-btn', { active: !advanced }]"
+              @click="advanced && toggleLevel()"
+            >Débutant</button>
+            <button
+              :class="['toggle-btn', { active: advanced }]"
+              @click="!advanced && toggleLevel()"
+            >Avancé</button>
+          </div>
+        </div>
+
+        <!-- Thème -->
+        <div class="control-group">
+          <span class="control-group__label">Thème</span>
+          <button class="theme-btn" :title="dark ? 'Passer en mode clair' : 'Passer en mode sombre'" @click="toggleTheme">
+            <span>{{ dark ? '☀️' : '🌙' }}</span>
+            <span>{{ dark ? 'Clair' : 'Sombre' }}</span>
+          </button>
+        </div>
+      </div>
+
       <a
         href="https://vuejs.org"
         target="_blank"
         rel="noopener noreferrer"
         class="sidebar__footer-link"
-      >
-        vuejs.org ↗
-      </a>
+      >vuejs.org ↗</a>
     </div>
   </aside>
 </template>
 
 <style scoped>
 .sidebar {
-  width: 220px;
+  width: 230px;
   min-height: 100vh;
   background: var(--sidebar);
   display: flex;
@@ -106,9 +129,7 @@ const navigation = [
   transition: color 0.12s;
 }
 
-.sidebar__close:hover {
-  color: #fff;
-}
+.sidebar__close:hover { color: #fff; }
 
 .sidebar__tagline {
   display: block;
@@ -168,20 +189,88 @@ const navigation = [
   text-align: center;
 }
 
+/* ── Footer controls ────────────────────────────────── */
 .sidebar__footer {
   padding: 1rem 1.25rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.sidebar__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.control-group__label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.toggle-pair {
+  display: flex;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 0.3rem 0.4rem;
+  font-size: 0.72rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.35);
+  transition: all 0.12s;
+}
+
+.toggle-btn:hover {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.toggle-btn.active {
+  background: var(--vue);
+  color: #fff;
+  font-weight: 600;
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.72rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.12s;
+  width: 100%;
+}
+
+.theme-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .sidebar__footer-link {
   font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.2);
   transition: color 0.12s;
 }
 
-.sidebar__footer-link:hover {
-  color: var(--vue);
-}
+.sidebar__footer-link:hover { color: var(--vue); }
 
 /* ── Mobile ─────────────────────────────────────────── */
 @media (max-width: 768px) {
@@ -195,12 +284,7 @@ const navigation = [
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .sidebar--open {
-    transform: translateX(0);
-  }
-
-  .sidebar__close {
-    display: block;
-  }
+  .sidebar--open  { transform: translateX(0); }
+  .sidebar__close { display: block; }
 }
 </style>

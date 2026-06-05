@@ -6,31 +6,32 @@ import BaseCard from '../components/demos/slots/BaseCard.vue'
 import ScopedList from '../components/demos/slots/ScopedList.vue'
 import BaseCardSource from '../components/demos/slots/BaseCard.vue?raw'
 import ScopedListSource from '../components/demos/slots/ScopedList.vue?raw'
+import { useLevel } from '../composables/useLevel'
 
-/* ── BaseCard slot builder ──────────────────────────── */
+const { advanced } = useLevel()
+
 const showHeader = ref(true)
 const showFooter = ref(true)
 
-/* ── ScopedList view mode ───────────────────────────── */
 type ViewMode = 'compact' | 'detailed'
 const viewMode = ref<ViewMode>('compact')
 
 const users = [
   { id: 1, name: 'Alice Martin', role: 'Designer UI', status: 'online', since: '2021' },
-  { id: 2, name: 'Bob Durand', role: 'Dev Backend', status: 'away', since: '2019' },
-  { id: 3, name: 'Chloé Roy', role: 'DevOps', status: 'offline', since: '2022' },
+  { id: 2, name: 'Bob Durand',   role: 'Dev Backend',  status: 'away',   since: '2019' },
+  { id: 3, name: 'Chloé Roy',    role: 'DevOps',        status: 'offline', since: '2022' },
 ]
 
 const statusColors: Record<string, string> = {
   online: '#22c55e',
-  away: '#f59e0b',
-  offline: '#94a3b8',
+  away:   '#f59e0b',
+  offline:'#94a3b8',
 }
 
 const statusLabels: Record<string, string> = {
   online: 'En ligne',
-  away: 'Absent',
-  offline: 'Hors ligne',
+  away:   'Absent',
+  offline:'Hors ligne',
 }
 </script>
 
@@ -39,47 +40,49 @@ const statusLabels: Record<string, string> = {
     <header class="page-header">
       <h1 class="page-title">Slots</h1>
       <p class="page-subtitle">
-        Les slots permettent au <strong>parent d'injecter du contenu</strong> dans le
-        rendu d'un composant enfant. C'est la clé pour créer des composants vraiment
-        réutilisables et flexibles.
+        Les slots permettent d'injecter du contenu HTML depuis le parent dans le rendu
+        d'un enfant. C'est ce qui rend les composants vraiment composables plutôt que
+        juste paramétrables.
       </p>
     </header>
 
-    <!-- ── BaseCard : named slots ────────────────────── -->
+    <!-- ── Section 1 : Slots nommés ──────────────────── -->
     <section class="section">
-      <h2 class="section-title">Slots nommés + guard $slots</h2>
+      <h2 class="section-title">Slots nommés</h2>
       <p class="section-text">
-        Un composant peut exposer plusieurs zones de contenu avec des noms.
-        <code>$slots.header</code> permet de ne rendre la zone que si le parent
-        fournit effectivement quelque chose — pas de div vide parasite.
+        Active et désactive les zones avec les toggles. Le composant <code>&lt;BaseCard&gt;</code>
+        n'affiche une zone que si le parent y met quelque chose.
       </p>
 
       <ConceptCallout type="why">
-        <strong>Pourquoi des slots ?</strong> Imagine un composant
-        <code>&lt;BaseCard&gt;</code> que tu utilises 50 fois dans ton app — chaque
-        fois avec un contenu différent. Avec des slots, tu changes le contenu, pas le
-        composant.
+        Sans slots, tu créerais des props <code>title</code>, <code>footer</code>...
+        mais de quel type ? <code>string</code> ? <code>VNode</code> ? Les slots résolvent
+        ça proprement : le parent injecte ce qu'il veut — texte, composants, HTML arbitraire.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="advanced" type="info" title="$slots guard">
+        <code>$slots.header</code> est un objet qui contient les fonctions de rendu
+        fournies par le parent. Il est <em>truthy</em> si le parent a déclaré un contenu
+        pour ce slot, <em>falsy</em> sinon. Le pattern <code>v-if="$slots.header"</code>
+        évite de rendre une <code>&lt;div&gt;</code> vide dans le DOM — utile quand
+        la zone a du padding ou une bordure qui créerait un artefact visuel.
       </ConceptCallout>
 
       <DemoBlock
         title="BaseCard.vue"
-        description="Active ou désactive les slots pour voir comment $slots guard fonctionne."
+        description="Active ou désactive les slots — observe comment le composant s'adapte."
         :code="BaseCardSource"
       >
         <div class="slot-builder">
           <div class="slot-toggles">
             <label class="slot-toggle">
               <input v-model="showHeader" type="checkbox" />
-              <span class="slot-toggle__track">
-                <span class="slot-toggle__knob" />
-              </span>
+              <span class="slot-toggle__track"><span class="slot-toggle__knob" /></span>
               <code>#header</code>
             </label>
             <label class="slot-toggle">
               <input v-model="showFooter" type="checkbox" />
-              <span class="slot-toggle__track">
-                <span class="slot-toggle__knob" />
-              </span>
+              <span class="slot-toggle__track"><span class="slot-toggle__knob" /></span>
               <code>#footer</code>
             </label>
           </div>
@@ -91,10 +94,7 @@ const statusLabels: Record<string, string> = {
               <template v-if="showHeader" #header>
                 <span>🃏 En-tête de la carte</span>
               </template>
-
-              Le contenu principal vit dans le slot par défaut. Il est toujours
-              présent.
-
+              Le contenu principal est dans le slot par défaut. Toujours là.
               <template v-if="showFooter" #footer>
                 <button class="slot-action-btn slot-action-btn--ghost">Annuler</button>
                 <button class="slot-action-btn slot-action-btn--primary">Sauvegarder</button>
@@ -103,31 +103,40 @@ const statusLabels: Record<string, string> = {
           </Transition>
         </div>
 
-        <p class="slot-hint" v-if="!showHeader && !showFooter">
-          👀 Seul le slot par défaut est rendu — les zones header et footer ont
-          disparu proprement grâce à <code>v-if="$slots.header"</code>.
+        <p v-if="!showHeader && !showFooter" class="slot-hint">
+          Seul le slot par défaut est rendu. Les zones header et footer ont disparu sans
+          laisser de div vide — c'est le <code>v-if="$slots.header"</code> qui fait ça.
         </p>
       </DemoBlock>
     </section>
 
-    <!-- ── ScopedList : scoped slots ─────────────────── -->
+    <!-- ── Section 2 : Slots scopés ──────────────────── -->
     <section class="section">
-      <h2 class="section-title">Slots scopés — le parent décide du rendu</h2>
+      <h2 class="section-title">Slots scopés</h2>
       <p class="section-text">
-        L'enfant expose de la donnée via <code>&lt;slot :item="item" /&gt;</code>.
-        Le parent récupère ces données avec <code>v-slot="{ item }"</code> et
-        choisit comment les afficher — sans toucher à la logique de liste.
+        <code>&lt;ScopedList&gt;</code> gère la logique (itération, états vide et chargement).
+        Le parent contrôle uniquement le rendu de chaque ligne — via
+        <code>v-slot="{ item, index }"</code>. Même composant, deux présentations.
       </p>
 
       <ConceptCallout type="tip">
-        Les slots scopés sont le pattern derrière des composants comme
-        <code>&lt;Transition&gt;</code> ou les tables de données — l'enfant gère la
-        logique, le parent gère le visuel.
+        Tu peux renommer les variables exposées directement dans la déstructuration :
+        <code>v-slot="{ item: user, index: i }"</code>. Pratique quand les noms génériques
+        comme <code>item</code> nuisent à la lisibilité.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="advanced" type="info" title="Compilation des slots scopés">
+        Un slot scopé compile vers une fonction dans l'objet <code>slots</code> du composant :
+        <code>slots.default?.({ item, index })</code>. L'enfant appelle cette fonction
+        avec les données qu'il veut exposer et obtient en retour un tableau de VNodes.
+        C'est exactement le même mécanisme que <code>&lt;Transition&gt;</code> ou
+        <code>&lt;KeepAlive&gt;</code> — ils passent tous leurs informations internes
+        via des slots scopés.
       </ConceptCallout>
 
       <DemoBlock
         title="ScopedList.vue"
-        description="Le même composant ScopedList, deux présentations complètement différentes."
+        description="Même composant, deux rendus complètement différents selon le parent."
         :code="ScopedListSource"
       >
         <div class="demo-panel">
@@ -135,34 +144,23 @@ const statusLabels: Record<string, string> = {
             <div class="control-item">
               <span class="control-label">Vue parente</span>
               <div class="btn-group">
-                <button
-                  :class="['btn-xs', { active: viewMode === 'compact' }]"
-                  @click="viewMode = 'compact'"
-                >Compacte</button>
-                <button
-                  :class="['btn-xs', { active: viewMode === 'detailed' }]"
-                  @click="viewMode = 'detailed'"
-                >Détaillée</button>
+                <button :class="['btn-xs', { active: viewMode === 'compact' }]" @click="viewMode = 'compact'">Compacte</button>
+                <button :class="['btn-xs', { active: viewMode === 'detailed' }]" @click="viewMode = 'detailed'">Détaillée</button>
               </div>
             </div>
           </div>
 
-          <!-- Compact view -->
           <ScopedList v-if="viewMode === 'compact'" :items="users">
             <template #default="{ item, index }">
               <div class="row-compact">
                 <span class="row-compact__num">{{ index + 1 }}</span>
-                <span
-                  class="row-compact__dot"
-                  :style="{ background: statusColors[item['status'] as string] }"
-                />
+                <span class="row-compact__dot" :style="{ background: statusColors[item['status'] as string] }" />
                 <span class="row-compact__name">{{ item['name'] }}</span>
                 <span class="row-compact__role">{{ item['role'] }}</span>
               </div>
             </template>
           </ScopedList>
 
-          <!-- Detailed view -->
           <ScopedList v-else :items="users">
             <template #default="{ item }">
               <div class="row-detailed">
@@ -171,14 +169,9 @@ const statusLabels: Record<string, string> = {
                 </div>
                 <div class="row-detailed__body">
                   <div class="row-detailed__name">{{ item['name'] }}</div>
-                  <div class="row-detailed__meta">
-                    {{ item['role'] }} · depuis {{ item['since'] }}
-                  </div>
+                  <div class="row-detailed__meta">{{ item['role'] }} · depuis {{ item['since'] }}</div>
                 </div>
-                <span
-                  class="row-detailed__status"
-                  :style="{ color: statusColors[item['status'] as string] }"
-                >
+                <span class="row-detailed__status" :style="{ color: statusColors[item['status'] as string] }">
                   ● {{ statusLabels[item['status'] as string] }}
                 </span>
               </div>
@@ -231,9 +224,7 @@ const statusLabels: Record<string, string> = {
   flex-shrink: 0;
 }
 
-.slot-toggle input:checked + .slot-toggle__track {
-  background: var(--vue);
-}
+.slot-toggle input:checked + .slot-toggle__track { background: var(--vue); }
 
 .slot-toggle__knob {
   position: absolute;
@@ -248,15 +239,13 @@ const statusLabels: Record<string, string> = {
   display: block;
 }
 
-.slot-toggle input:checked + .slot-toggle__track .slot-toggle__knob {
-  transform: translateX(1rem);
-}
+.slot-toggle input:checked + .slot-toggle__track .slot-toggle__knob { transform: translateX(1rem); }
 
 .slot-toggle code {
   font-size: 0.78rem;
   font-family: var(--mono);
   color: var(--text-muted);
-  background: #f1f5f9;
+  background: var(--tag-bg);
   padding: 0.1em 0.4em;
   border-radius: 3px;
 }
@@ -271,7 +260,7 @@ const statusLabels: Record<string, string> = {
   font-size: 0.8rem;
   color: var(--text-muted);
   padding: 0.6rem 0.875rem;
-  background: #f8fafc;
+  background: var(--surface-alt);
   border: 1px dashed var(--border);
   border-radius: var(--radius);
   line-height: 1.6;
@@ -282,6 +271,8 @@ const statusLabels: Record<string, string> = {
   font-size: 0.8em;
   color: var(--vue-dark);
 }
+
+html.dark .slot-hint code { color: var(--vue); }
 
 /* ── Card transition ────────────────────────────────── */
 .card-update-enter-active,
@@ -310,10 +301,7 @@ const statusLabels: Record<string, string> = {
   color: var(--text-muted);
 }
 
-.slot-action-btn--ghost:hover {
-  background: var(--bg);
-  color: var(--text);
-}
+.slot-action-btn--ghost:hover { background: var(--bg); color: var(--text); }
 
 .slot-action-btn--primary {
   background: var(--vue);
@@ -321,9 +309,7 @@ const statusLabels: Record<string, string> = {
   color: #fff;
 }
 
-.slot-action-btn--primary:hover {
-  background: #38a374;
-}
+.slot-action-btn--primary:hover { background: #38a374; }
 
 /* ── Compact row ────────────────────────────────────── */
 .row-compact {
@@ -350,16 +336,8 @@ const statusLabels: Record<string, string> = {
   flex-shrink: 0;
 }
 
-.row-compact__name {
-  font-weight: 600;
-  color: var(--text);
-  flex: 1;
-}
-
-.row-compact__role {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
+.row-compact__name { font-weight: 600; color: var(--text); flex: 1; }
+.row-compact__role { font-size: 0.75rem; color: var(--text-muted); }
 
 /* ── Detailed row ───────────────────────────────────── */
 .row-detailed {
@@ -383,25 +361,8 @@ const statusLabels: Record<string, string> = {
   flex-shrink: 0;
 }
 
-.row-detailed__body {
-  flex: 1;
-}
-
-.row-detailed__name {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.row-detailed__meta {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  margin-top: 0.1rem;
-}
-
-.row-detailed__status {
-  font-size: 0.72rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
+.row-detailed__body { flex: 1; }
+.row-detailed__name { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+.row-detailed__meta { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.1rem; }
+.row-detailed__status { font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
 </style>

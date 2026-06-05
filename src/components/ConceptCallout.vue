@@ -65,9 +65,13 @@ const config: Record<CalloutType, { icon: string; label: string }> = {
 .callout__body :deep(code) {
   font-family: var(--mono);
   font-size: 0.82em;
-  background: rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0.07);
   padding: 0.1em 0.3em;
   border-radius: 3px;
+}
+
+html.dark .callout__body :deep(code) {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .callout__body :deep(strong) {
@@ -77,38 +81,26 @@ const config: Record<CalloutType, { icon: string; label: string }> = {
 
 /* ── Variants ───────────────────────────────────────── */
 .callout--why {
-  background: #f5f3ff;
+  background: var(--callout-why-bg);
   border-color: #8b5cf6;
 }
-
-.callout--why .callout__label {
-  color: #7c3aed;
-}
+.callout--why .callout__label { color: var(--callout-why-fg); }
 
 .callout--tip {
-  background: #fefce8;
+  background: var(--callout-tip-bg);
   border-color: #eab308;
 }
-
-.callout--tip .callout__label {
-  color: #a16207;
-}
+.callout--tip .callout__label { color: var(--callout-tip-fg); }
 
 .callout--info {
-  background: #eff6ff;
+  background: var(--callout-info-bg);
   border-color: #3b82f6;
 }
-
-.callout--info .callout__label {
-  color: #1d4ed8;
-}
+.callout--info .callout__label { color: var(--callout-info-fg); }
 
 .callout--warning {
-  background: #fff7ed;
+  background: var(--callout-warning-bg);
   border-color: #f97316;
 }
-
-.callout--warning .callout__label {
-  color: #c2410c;
-}
+.callout--warning .callout__label { color: var(--callout-warning-fg); }
 </style>

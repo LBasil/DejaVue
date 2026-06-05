@@ -7,7 +7,7 @@ const topics = [
     color: '#3b82f6',
     tagline: 'Parent → Enfant',
     description:
-      'Passe des données typées à tes composants. Apprends defineProps, withDefaults et les interfaces TypeScript.',
+      'Passer des données typées à un composant. defineProps, withDefaults, interfaces TypeScript.',
     tags: ['defineProps', 'withDefaults', 'interface'],
   },
   {
@@ -17,7 +17,7 @@ const topics = [
     color: '#f59e0b',
     tagline: 'Enfant → Parent',
     description:
-      "Remonte des événements typés depuis un composant enfant. v-model custom avec defineModel en une ligne.",
+      'Remonter des signaux typés depuis un enfant. v-model personnalisé avec defineModel.',
     tags: ['defineEmits', 'defineModel', 'v-model'],
   },
   {
@@ -25,9 +25,9 @@ const topics = [
     label: 'Slots',
     icon: '◈',
     color: '#8b5cf6',
-    tagline: 'Composition de contenu',
+    tagline: 'Composition',
     description:
-      'Injecte du HTML dans un composant depuis le parent. Slots nommés, scopés, et guards $slots.',
+      'Injecter du contenu HTML dans un composant depuis son parent. Slots nommés, scopés, guards.',
     tags: ['#named', 'v-slot', '$slots'],
   },
 ]
@@ -39,11 +39,11 @@ const topics = [
       <div class="hero__badge">Vue 3 · TypeScript · Vite</div>
       <h1 class="hero__title">DejaVue.</h1>
       <p class="hero__subtitle">
-        Un terrain de jeu personnel pour maîtriser Vue 3 + TypeScript.<br />
-        Des composants vrais. Du code réel. Des démos vivantes.
+        Un carnet perso de patterns Vue 3 + TypeScript.<br />
+        Des composants qui font quelque chose. Du code réel. Rien de fictif.
       </p>
       <RouterLink to="/props" class="hero__cta">
-        Commencer par les Props <span aria-hidden="true">→</span>
+        Commencer <span aria-hidden="true">→</span>
       </RouterLink>
     </header>
 
@@ -71,7 +71,7 @@ const topics = [
     </div>
 
     <footer class="home-footer">
-      <p>Vue = français pour <em>"vue"</em>. Le framework qui te laisse voir ce qui se passe.</p>
+      <p>Vue = français pour <em>"vue"</em>. Le framework qui rend les choses visibles.</p>
     </footer>
   </div>
 </template>
@@ -81,7 +81,6 @@ const topics = [
   animation: fade-up 0.4s ease both;
 }
 
-/* ── Hero ───────────────────────────────────────────── */
 .hero {
   margin-bottom: 3rem;
   padding-bottom: 2.5rem;
@@ -101,7 +100,6 @@ const topics = [
   border-radius: 9999px;
   margin-bottom: 1.25rem;
   letter-spacing: 0.04em;
-  animation: fade-up 0.4s ease both;
 }
 
 .hero__title {
@@ -113,7 +111,6 @@ const topics = [
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: fade-up 0.4s ease 0.05s both;
   line-height: 1.1;
 }
 
@@ -123,7 +120,6 @@ const topics = [
   line-height: 1.75;
   margin-bottom: 1.75rem;
   max-width: 480px;
-  animation: fade-up 0.4s ease 0.1s both;
 }
 
 .hero__cta {
@@ -137,7 +133,6 @@ const topics = [
   padding: 0.65rem 1.25rem;
   border-radius: 8px;
   transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
-  animation: fade-up 0.4s ease 0.15s both;
 }
 
 .hero__cta:hover {
@@ -146,13 +141,12 @@ const topics = [
   box-shadow: 0 4px 16px rgba(66, 184, 131, 0.3);
 }
 
-/* ── Topic cards ────────────────────────────────────── */
+/* ── Cards ──────────────────────────────────────────── */
 .topics {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1rem;
   margin-bottom: 3rem;
-  animation: fade-up 0.4s ease 0.2s both;
 }
 
 .topic-card {
@@ -239,7 +233,7 @@ const topics = [
 .topic-card__tag {
   font-size: 0.65rem;
   font-family: var(--mono);
-  background: #f1f5f9;
+  background: var(--tag-bg);
   color: var(--text-muted);
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
@@ -249,24 +243,22 @@ const topics = [
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--accent);
-  transition: gap 0.12s;
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  transition: gap 0.12s;
 }
 
 .topic-card:hover .topic-card__footer {
   gap: 0.6rem;
 }
 
-/* ── Footer ─────────────────────────────────────────── */
 .home-footer {
   text-align: center;
   font-size: 0.78rem;
   color: var(--text-muted);
   padding: 1.5rem 0;
   border-top: 1px solid var(--border);
-  animation: fade-up 0.4s ease 0.25s both;
 }
 
 .home-footer em {
@@ -275,8 +267,6 @@ const topics = [
 }
 
 @media (max-width: 640px) {
-  .topics {
-    grid-template-columns: 1fr;
-  }
+  .topics { grid-template-columns: 1fr; }
 }
 </style>

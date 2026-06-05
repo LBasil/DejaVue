@@ -58,7 +58,7 @@ const tab = ref<'demo' | 'code'>('demo')
   align-items: flex-start;
   justify-content: space-between;
   padding: 0.875rem 1.25rem;
-  background: #fafbfc;
+  background: var(--surface-alt);
   border-bottom: 1px solid var(--border);
   gap: 1rem;
 }
