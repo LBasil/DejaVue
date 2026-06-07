@@ -57,7 +57,7 @@ const statusLabels: Record<string, string> = {
       <ConceptCallout type="why">
         Sans slots, tu créerais des props <code>title</code>, <code>footer</code>...
         mais de quel type ? <code>string</code> ? <code>VNode</code> ? Les slots résolvent
-        ça proprement : le parent injecte ce qu'il veut — texte, composants, HTML arbitraire.
+        ça proprement : le parent injecte ce qu'il veut - texte, composants, HTML arbitraire.
       </ConceptCallout>
 
       <ConceptCallout v-if="level !== 'beginner'" type="tip" title="Contenu par défaut (fallback)">
@@ -71,13 +71,13 @@ const statusLabels: Record<string, string> = {
         <code>$slots.header</code> est un objet qui contient les fonctions de rendu
         fournies par le parent. Il est <em>truthy</em> si le parent a déclaré un contenu
         pour ce slot, <em>falsy</em> sinon. Le pattern <code>v-if="$slots.header"</code>
-        évite de rendre une <code>&lt;div&gt;</code> vide dans le DOM — utile quand
+        évite de rendre une <code>&lt;div&gt;</code> vide dans le DOM - utile quand
         la zone a du padding ou une bordure qui créerait un artefact visuel.
       </ConceptCallout>
 
       <DemoBlock
         title="BaseCard.vue"
-        description="Active ou désactive les slots — observe comment le composant s'adapte."
+        description="Active ou désactive les slots - observe comment le composant s'adapte."
         :code="BaseCardSource"
       >
         <div class="slot-builder">
@@ -112,7 +112,7 @@ const statusLabels: Record<string, string> = {
 
         <p v-if="!showHeader && !showFooter" class="slot-hint">
           Seul le slot par défaut est rendu. Les zones header et footer ont disparu sans
-          laisser de div vide — c'est le <code>v-if="$slots.header"</code> qui fait ça.
+          laisser de div vide - c'est le <code>v-if="$slots.header"</code> qui fait ça.
         </p>
       </DemoBlock>
     </section>
@@ -122,7 +122,7 @@ const statusLabels: Record<string, string> = {
       <h2 class="section-title">Slots scopés</h2>
       <p class="section-text">
         <code>&lt;ScopedList&gt;</code> gère la logique (itération, états vide et chargement).
-        Le parent contrôle uniquement le rendu de chaque ligne — via
+        Le parent contrôle uniquement le rendu de chaque ligne - via
         <code>v-slot="{ item, index }"</code>. Même composant, deux présentations.
       </p>
 
@@ -144,7 +144,7 @@ const statusLabels: Record<string, string> = {
         <code>slots.default?.({ item, index })</code>. L'enfant appelle cette fonction
         avec les données qu'il veut exposer et obtient en retour un tableau de VNodes.
         C'est exactement le même mécanisme que <code>&lt;Transition&gt;</code> ou
-        <code>&lt;KeepAlive&gt;</code> — ils passent tous leurs informations internes
+        <code>&lt;KeepAlive&gt;</code> - ils passent tous leurs informations internes
         via des slots scopés.
       </ConceptCallout>
 

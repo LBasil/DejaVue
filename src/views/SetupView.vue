@@ -71,7 +71,7 @@ const fileTree = `mon-app/
         <code>vite.config.ts</code> charge <code>@vitejs/plugin-vue</code>, qui appelle
         <code>@vue/compiler-sfc</code> à chaque import de fichier <code>.vue</code>. Le
         SFC est découpé et chaque bloc est transformé séparément. <code>vue-tsc</code>
-        (wrapping de <code>tsc</code>) assure la vérification de types sur les SFCs —
+        (wrapping de <code>tsc</code>) assure la vérification de types sur les SFCs -
         <code>tsconfig.app.json</code> inclut <code>"types": ["vite/client"]</code> pour
         que TypeScript reconnaisse les imports <code>?raw</code>, <code>?url</code>, etc.
         En dev, la transpilation runtime utilise esbuild (rapide, sans vérification de types).
@@ -93,7 +93,7 @@ const fileTree = `mon-app/
       <ConceptCallout type="info">
         <code>main.ts</code> fait une seule chose : monter l'app Vue sur un élément DOM.
         C'est là que tu ajoutes les plugins (routeur, store, i18n).
-        <code>App.vue</code> est le premier composant rendu — la racine de l'arbre.
+        <code>App.vue</code> est le premier composant rendu - la racine de l'arbre.
       </ConceptCallout>
 
       <ConceptCallout v-if="level !== 'beginner'" type="tip" title="assets/ vs public/">
@@ -123,9 +123,9 @@ const fileTree = `mon-app/
 
       <ConceptCallout type="tip">
         Les trois blocs :<br />
-        <code>&lt;script setup lang="ts"&gt;</code> — logique, réactivité, imports.<br />
-        <code>&lt;template&gt;</code> — le HTML du composant avec les directives Vue.<br />
-        <code>&lt;style scoped&gt;</code> — les styles, isolés à ce composant.<br />
+        <code>&lt;script setup lang="ts"&gt;</code> - logique, réactivité, imports.<br />
+        <code>&lt;template&gt;</code> - le HTML du composant avec les directives Vue.<br />
+        <code>&lt;style scoped&gt;</code> - les styles, isolés à ce composant.<br />
         Seul <code>&lt;template&gt;</code> est obligatoire.
       </ConceptCallout>
 
@@ -135,7 +135,7 @@ const fileTree = `mon-app/
         attribut unique (<code>data-v-xxxxxxxx</code>) sur chaque élément du composant
         et le préfixe dans le sélecteur CSS. Les styles ne fuient pas. Contre-partie :
         tu ne peux pas styler un composant enfant depuis le parent avec des sélecteurs
-        scoped — utilise <code>:deep()</code> dans ce cas.
+        scoped - utilise <code>:deep()</code> dans ce cas.
       </ConceptCallout>
 
       <ConceptCallout v-if="level === 'experienced'" type="info" title="Compilation d'un SFC">
@@ -150,7 +150,7 @@ const fileTree = `mon-app/
 
       <DemoBlock
         title="HelloVue.vue"
-        description="Les trois blocs d'un SFC dans leur plus simple expression — tape ton prénom."
+        description="Les trois blocs d'un SFC dans leur plus simple expression - tape ton prénom."
         :code="HelloVueSource"
       >
         <HelloVue />

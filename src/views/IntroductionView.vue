@@ -16,7 +16,7 @@ const { level } = useLevel()
       <h1 class="page-title">Introduction</h1>
       <p class="page-subtitle">
         Ce que Vue fait, comment il le fait, et pourquoi ça marche comme ça.
-        Pas de théorie pour la théorie — du concret.
+        Pas de théorie pour la théorie - du concret.
       </p>
     </header>
 
@@ -27,7 +27,7 @@ const { level } = useLevel()
         Vue est un framework JavaScript pour construire des interfaces utilisateur.
         Son principe central : tu déclares des données réactives, et Vue maintient
         ton interface synchronisée avec elles automatiquement. Quand les données
-        changent, l'écran se met à jour — sans que tu aies besoin de toucher le DOM.
+        changent, l'écran se met à jour - sans que tu aies besoin de toucher le DOM.
       </p>
 
       <ConceptCallout type="why">
@@ -40,7 +40,7 @@ const { level } = useLevel()
         Vue construit un graphe de dépendances à l'exécution. Quand tu lis
         <code>count.value</code> dans un template ou un <code>computed</code>, Vue
         enregistre cette lecture. Quand <code>count</code> change, Vue sait exactement
-        quels composants et quels computeds en dépendent — et ne re-rend que ceux-là.
+        quels composants et quels computeds en dépendent - et ne re-rend que ceux-là.
         Pas de virtualDOM diff complet à chaque changement.
       </ConceptCallout>
 
@@ -57,7 +57,7 @@ const { level } = useLevel()
 
       <DemoBlock
         title="ReactiveCounter.vue"
-        description="ref() + computed() en action — modifie le compteur et observe la mise à jour."
+        description="ref() + computed() en action - modifie le compteur et observe la mise à jour."
         :code="ReactiveCounterSource"
       >
         <ReactiveCounter />
@@ -69,21 +69,21 @@ const { level } = useLevel()
       <h2 class="section-title">Le template</h2>
       <p class="section-text">
         Le <code>&lt;template&gt;</code> d'un composant Vue décrit sa structure HTML.
-        Vue étend le HTML standard avec des directives — des attributs spéciaux préfixés
-        <code>v-</code> — qui relient le balisage à l'état réactif.
+        Vue étend le HTML standard avec des directives - des attributs spéciaux préfixés
+        <code>v-</code> - qui relient le balisage à l'état réactif.
       </p>
 
       <ConceptCallout type="tip">
         Les cinq directives essentielles :<br />
-        <code>{{ }}</code> — interpoler une valeur dans le texte<br />
-        <code>:attr</code> — binder un attribut HTML à une expression (<code>v-bind</code>)<br />
-        <code>@event</code> — écouter un événement DOM (<code>v-on</code>)<br />
-        <code>v-if / v-else</code> — rendu conditionnel<br />
-        <code>v-for="item in list"</code> — rendu de liste
+        <code>{{ }}</code> - interpoler une valeur dans le texte<br />
+        <code>:attr</code> - binder un attribut HTML à une expression (<code>v-bind</code>)<br />
+        <code>@event</code> - écouter un événement DOM (<code>v-on</code>)<br />
+        <code>v-if / v-else</code> - rendu conditionnel<br />
+        <code>v-for="item in list"</code> - rendu de liste
       </ConceptCallout>
 
       <ConceptCallout v-if="level !== 'beginner'" type="tip" title="Shorthands">
-        <code>v-bind:href="url"</code> s'abrège <code>:href="url"</code> — le
+        <code>v-bind:href="url"</code> s'abrège <code>:href="url"</code> - le
         <code>:</code> est le shorthand de <code>v-bind</code>.<br />
         <code>v-on:click="fn"</code> s'abrège <code>@click="fn"</code>.<br />
         Ces shorthands sont la norme dans tout le code Vue moderne. La forme longue
@@ -91,7 +91,7 @@ const { level } = useLevel()
       </ConceptCallout>
 
       <ConceptCallout v-if="level === 'experienced'" type="info" title="Compilation du template">
-        Le template n'est pas interprété à runtime — il est compilé en render function
+        Le template n'est pas interprété à runtime - il est compilé en render function
         JavaScript par <code>@vue/compiler-dom</code> (via Vite en dev, offline en build).
         L'analyse statique génère des <code>patchFlags</code> sur les nœuds dynamiques.
         Un <code v-pre>&lt;div&gt;{{ name }}&lt;/div&gt;</code> reçoit le flag <code>TEXT (1)</code>
@@ -102,7 +102,7 @@ const { level } = useLevel()
 
       <DemoBlock
         title="TemplateSyntax.vue"
-        description="v-model, v-if, v-for, :style, @click — les directives essentielles en un seul composant."
+        description="v-model, v-if, v-for, :style, @click - les directives essentielles en un seul composant."
         :code="TemplateSyntaxSource"
       >
         <TemplateSyntax />
@@ -120,16 +120,16 @@ const { level } = useLevel()
 
       <ConceptCallout type="why">
         Deux instances du même composant ont deux états distincts. Tu peux réutiliser
-        <code>&lt;Counter /&gt;</code> cinquante fois sur la même page — chacune a son
+        <code>&lt;Counter /&gt;</code> cinquante fois sur la même page - chacune a son
         propre compteur, ses propres refs, son propre cycle de vie. C'est ce qui rend
         les composants vraiment réutilisables.
       </ConceptCallout>
 
       <ConceptCallout v-if="level !== 'beginner'" type="tip" title="Les trois canaux de communication">
         Les composants communiquent entre eux par trois mécanismes :<br />
-        <strong>Props</strong> — le parent envoie des données vers l'enfant.<br />
-        <strong>Emits</strong> — l'enfant signale des événements vers le parent.<br />
-        <strong>Slots</strong> — le parent injecte du contenu dans l'enfant.<br />
+        <strong>Props</strong> - le parent envoie des données vers l'enfant.<br />
+        <strong>Emits</strong> - l'enfant signale des événements vers le parent.<br />
+        <strong>Slots</strong> - le parent injecte du contenu dans l'enfant.<br />
         La suite de ce carnet couvre chacun de ces canaux avec des démos interactives.
       </ConceptCallout>
 
@@ -139,7 +139,7 @@ const { level } = useLevel()
         closures plutôt que sur des classes et <code>this</code> (Vue 2). Cette architecture
         rend les composables naturels : une fonction qui appelle <code>ref()</code>,
         <code>computed()</code> ou <code>watch()</code> dans son scope et retourne
-        ces primitives — pas de magie, juste une closure.
+        ces primitives - pas de magie, juste une closure.
       </ConceptCallout>
 
       <div class="component-tree">
@@ -158,7 +158,7 @@ const { level } = useLevel()
                 </div>
                 <div class="ct-branch">
                   <span class="ct-node ct-node--highlight">Counter.vue</span>
-                  <span class="ct-note">count = 0 — état indépendant</span>
+                  <span class="ct-note">count = 0 - état indépendant</span>
                 </div>
               </div>
             </div>

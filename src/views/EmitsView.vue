@@ -49,7 +49,7 @@ function onReact(emoji: string, count: number) {
       <p class="section-text">
         Chaque réaction déclenche un <code>emit</code> avec le type d'emoji et son nouveau
         compteur. Le parent reçoit ces données via <code>@react="handler"</code> et fait ce
-        qu'il veut avec — ici, les afficher dans un journal.
+        qu'il veut avec - ici, les afficher dans un journal.
       </p>
 
       <ConceptCallout type="why">
@@ -62,14 +62,14 @@ function onReact(emoji: string, count: number) {
       <ConceptCallout v-if="level !== 'beginner'" type="tip" title="Conventions de nommage">
         Les événements s'écrivent en camelCase dans <code>defineEmits</code>
         (<code>react</code>, <code>itemSelected</code>). Vue gère la correspondance
-        avec le kebab-case côté parent — <code>@item-selected</code> et
+        avec le kebab-case côté parent - <code>@item-selected</code> et
         <code>@itemSelected</code> fonctionnent tous les deux. La convention actuelle
         dans les projets Vue 3 est d'utiliser camelCase partout.
       </ConceptCallout>
 
       <ConceptCallout v-if="level === 'experienced'" type="info" title="Sous le capot">
         <code>defineEmits&lt;T&gt;()</code> en TypeScript générique génère des
-        validateurs runtime en dev — Vue vérifie que les événements émis
+        validateurs runtime en dev - Vue vérifie que les événements émis
         correspondent aux déclarations. En production, le tree-shaker retire
         ces validateurs. Contrairement aux props, Vue ne génère pas de warning
         si tu émets un événement non déclaré, mais l'IDE et TypeScript te
@@ -78,7 +78,7 @@ function onReact(emoji: string, count: number) {
 
       <DemoBlock
         title="ReactionBar.vue"
-        description="defineEmits avec payload typé — le journal montre ce que le parent reçoit."
+        description="defineEmits avec payload typé - le journal montre ce que le parent reçoit."
         :code="ReactionBarSource"
       >
         <div class="demo-panel">
@@ -98,7 +98,7 @@ function onReact(emoji: string, count: number) {
 
     <!-- ── Section 2 : Compteur ──────────────────────── -->
     <section class="section">
-      <h2 class="section-title">Tuples nommés — Vue 3.3+</h2>
+      <h2 class="section-title">Tuples nommés - Vue 3.3+</h2>
       <p class="section-text">
         La syntaxe <code>{ eventName: [param: Type] }</code> documente le payload
         directement dans la signature. L'IDE autocomplète les paramètres à l'écoute
@@ -107,7 +107,7 @@ function onReact(emoji: string, count: number) {
 
       <ConceptCallout type="tip">
         Les labels dans les tuples (<code>value: number</code>) sont purement
-        documentaires — ils disparaissent complètement à la compilation. Aucun
+        documentaires - ils disparaissent complètement à la compilation. Aucun
         impact sur le bundle.
       </ConceptCallout>
 
@@ -149,7 +149,7 @@ function onReact(emoji: string, count: number) {
 
     <!-- ── Section 3 : v-model ───────────────────────── -->
     <section class="section">
-      <h2 class="section-title">defineModel — v-model en une ligne</h2>
+      <h2 class="section-title">defineModel - v-model en une ligne</h2>
       <p class="section-text">
         <code>defineModel()</code> (Vue 3.4+) crée un ref bidirectionnel bindable
         directement avec <code>v-model</code>. Plus besoin d'écrire la prop
@@ -174,7 +174,7 @@ function onReact(emoji: string, count: number) {
       <ConceptCallout v-if="level === 'experienced'" type="info" title="defineModel sous le capot">
         <code>const model = defineModel&lt;string&gt;()</code> compile vers une prop
         <code>modelValue</code> + un emit <code>update:modelValue</code>. Le ref
-        retourné est un <code>WritableComputedRef</code> — lire <code>model.value</code>
+        retourné est un <code>WritableComputedRef</code> - lire <code>model.value</code>
         lit la prop, écrire <code>model.value = x</code> émet
         <code>update:modelValue</code>. Vue 3.4 supporte aussi plusieurs
         <code>defineModel</code> par composant, pour des bindings nommés :
@@ -183,7 +183,7 @@ function onReact(emoji: string, count: number) {
 
       <DemoBlock
         title="CustomInput.vue"
-        description="Input avec compteur de caractères — bindé via v-model depuis le parent."
+        description="Input avec compteur de caractères - bindé via v-model depuis le parent."
         :code="CustomInputSource"
       >
         <div class="demo-panel">

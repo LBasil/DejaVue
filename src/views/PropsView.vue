@@ -18,8 +18,8 @@ const badgeVariant = ref<Variant>('success')
 const badgeSize = ref<Size>('md')
 const badgeDot = ref(true)
 
-const cardName = ref('Basil Lhote')
-const cardRole = ref('Lead Developer')
+const cardName = ref('Basil L\'hote')
+const cardRole = ref('Developer')
 const cardStatus = ref<Status>('online')
 const cardVerified = ref(true)
 
@@ -62,7 +62,7 @@ const statuses: { value: Status; label: string; color: string }[] = [
       </ConceptCallout>
 
       <ConceptCallout v-if="level === 'experienced'" type="info" title="Sous le capot">
-        <code>defineProps</code> est une macro compilée par le SFC compiler — elle
+        <code>defineProps</code> est une macro compilée par le SFC compiler - elle
         n'existe pas dans le bundle final. Vue la transforme en options classiques :
         <code>props: { label: { type: String, required: true } }</code>. En dev,
         Vue génère des validateurs runtime qui t'avertissent si tu passes le mauvais type.
@@ -71,7 +71,7 @@ const statuses: { value: Status; label: string; color: string }[] = [
 
       <DemoBlock
         title="AppBadge.vue"
-        description="Variant, size, dot — union types + withDefaults."
+        description="Variant, size, dot - union types + withDefaults."
         :code="AppBadgeSource"
       >
         <div class="demo-panel">
@@ -115,7 +115,7 @@ const statuses: { value: Status; label: string; color: string }[] = [
       <h2 class="section-title">Interface TypeScript + props calculées</h2>
       <p class="section-text">
         Quand les props forment un groupe cohérent, une <code>interface</code> nommée est plus
-        lisible qu'un type inline. Remplis le formulaire — chaque champ est une prop de
+        lisible qu'un type inline. Remplis le formulaire - chaque champ est une prop de
         <code>&lt;UserCard&gt;</code>.
       </p>
 
@@ -129,7 +129,7 @@ const statuses: { value: Status; label: string; color: string }[] = [
         Pour les props de type <code>object</code> ou <code>array</code>,
         <code>withDefaults</code> exige une factory function :
         <code>default: () => []</code> et non <code>default: []</code>. Sans factory,
-        toutes les instances du composant partageraient la même référence d'objet —
+        toutes les instances du composant partageraient la même référence d'objet -
         modifier l'une modifierait toutes les autres.
       </ConceptCallout>
 
@@ -138,7 +138,7 @@ const statuses: { value: Status; label: string; color: string }[] = [
         Vue 3. Quand le parent change <code>name</code>, Vue détecte la modification,
         invalide le composant enfant dans le virtual DOM et re-render uniquement
         ce qui a changé. La prop <code>computed</code> (<code>initials</code> dans
-        UserCard) est recalculée paresseusement — seulement si <code>name</code>
+        UserCard) est recalculée paresseusement - seulement si <code>name</code>
         a effectivement changé.
       </ConceptCallout>
 

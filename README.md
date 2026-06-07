@@ -2,8 +2,6 @@
 
 Carnet personnel de patterns Vue 3 + TypeScript. Des composants interactifs, du code réel, et des explications à trois niveaux de profondeur.
 
-Le nom c'est un jeu de mots. Tu l'as compris.
-
 ---
 
 ## Stack
@@ -42,9 +40,9 @@ Chaque section a une démo interactive et affiche le vrai code source du composa
 
 Un sélecteur en bas de la sidebar filtre le contenu affiché :
 
-- **Débutant** — l'essentiel, sans bruit
-- **Intermédiaire** — bonnes pratiques, pièges courants
-- **Expérimenté** — compilation, réactivité interne, edge cases
+- **Débutant** l'essentiel, sans bruit
+- **Intermédiaire** bonnes pratiques, pièges courants
+- **Expérimenté** compilation, réactivité interne, edge cases
 
 Le choix est persisté dans `localStorage`.
 

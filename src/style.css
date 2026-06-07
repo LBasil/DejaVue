@@ -5,7 +5,7 @@
   padding: 0;
 }
 
-/* ── Variables — light ──────────────────────────────── */
+/* ── Variables light ──────────────────────────────── */
 :root {
   --vue: #42b883;
   --vue-dark: #35495e;
@@ -37,7 +37,7 @@
   --callout-warning-fg: #c2410c;
 }
 
-/* ── Variables — dark ───────────────────────────────── */
+/* ── Variables dark ───────────────────────────────── */
 html.dark {
   --bg: #111827;
   --surface: #1f2937;

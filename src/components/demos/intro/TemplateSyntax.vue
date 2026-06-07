@@ -63,7 +63,7 @@ const colors: Record<Color, string> = {
     </Transition>
 
     <div v-if="!show" class="tpl__empty">
-      <code>v-if="show"</code> est <code>false</code> — carte absente du DOM
+      <code>v-if="show"</code> est <code>false</code> - carte absente du DOM
     </div>
   </div>
 </template>
