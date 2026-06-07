@@ -2,21 +2,31 @@
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTheme } from '../composables/useTheme'
-import { useLevel } from '../composables/useLevel'
+import { useLevel, type Level } from '../composables/useLevel'
 
 const props = defineProps<{ open: boolean }>()
 const emit = defineEmits<{ close: [] }>()
 
 const route = useRoute()
 const { dark, toggle: toggleTheme } = useTheme()
-const { advanced, toggle: toggleLevel } = useLevel()
+const { level, setLevel } = useLevel()
 
 watch(() => route.path, () => emit('close'))
+
+const levels: { value: Level; label: string }[] = [
+  { value: 'beginner',     label: 'Débutant' },
+  { value: 'intermediate', label: 'Intermédiaire' },
+  { value: 'experienced',  label: 'Expérimenté' },
+]
 
 const navigation = [
   {
     group: 'Démarrage',
-    items: [{ path: '/', label: 'Accueil', icon: '⌂' }],
+    items: [
+      { path: '/',             label: 'Accueil',      icon: '⌂' },
+      { path: '/introduction', label: 'Introduction',  icon: '▶' },
+      { path: '/setup',        label: 'Mise en place', icon: '⚙' },
+    ],
   },
   {
     group: 'Composants',
@@ -58,22 +68,27 @@ const navigation = [
         <!-- Niveau -->
         <div class="control-group">
           <span class="control-group__label">Niveau</span>
-          <div class="toggle-pair">
+          <div class="level-list">
             <button
-              :class="['toggle-btn', { active: !advanced }]"
-              @click="advanced && toggleLevel()"
-            >Débutant</button>
-            <button
-              :class="['toggle-btn', { active: advanced }]"
-              @click="!advanced && toggleLevel()"
-            >Avancé</button>
+              v-for="lvl in levels"
+              :key="lvl.value"
+              :class="['level-btn', { active: level === lvl.value }]"
+              @click="setLevel(lvl.value)"
+            >
+              <span class="level-btn__dot" />
+              {{ lvl.label }}
+            </button>
           </div>
         </div>
 
         <!-- Thème -->
         <div class="control-group">
           <span class="control-group__label">Thème</span>
-          <button class="theme-btn" :title="dark ? 'Passer en mode clair' : 'Passer en mode sombre'" @click="toggleTheme">
+          <button
+            class="theme-btn"
+            :title="dark ? 'Passer en mode clair' : 'Passer en mode sombre'"
+            @click="toggleTheme"
+          >
             <span>{{ dark ? '☀️' : '🌙' }}</span>
             <span>{{ dark ? 'Clair' : 'Sombre' }}</span>
           </button>
@@ -218,33 +233,53 @@ const navigation = [
   color: rgba(255, 255, 255, 0.22);
 }
 
-.toggle-pair {
+/* ── Level radio buttons ────────────────────────────── */
+.level-list {
   display: flex;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  overflow: hidden;
+  flex-direction: column;
+  gap: 0.05rem;
 }
 
-.toggle-btn {
-  flex: 1;
-  padding: 0.3rem 0.4rem;
-  font-size: 0.72rem;
+.level-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.28rem 0.5rem;
+  font-size: 0.725rem;
   background: transparent;
   border: none;
   color: rgba(255, 255, 255, 0.35);
+  border-radius: 5px;
+  text-align: left;
   transition: all 0.12s;
+  width: 100%;
 }
 
-.toggle-btn:hover {
+.level-btn:hover {
   color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.04);
 }
 
-.toggle-btn.active {
-  background: var(--vue);
-  color: #fff;
+.level-btn.active {
+  color: var(--vue);
   font-weight: 600;
 }
 
+.level-btn__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  transition: all 0.12s;
+}
+
+.level-btn.active .level-btn__dot {
+  background: var(--vue);
+  border-color: var(--vue);
+}
+
+/* ── Theme button ───────────────────────────────────── */
 .theme-btn {
   display: flex;
   align-items: center;

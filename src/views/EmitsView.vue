@@ -10,7 +10,7 @@ import CustomInputSource from '../components/demos/emits/CustomInput.vue?raw'
 import ReactionBarSource from '../components/demos/emits/ReactionBar.vue?raw'
 import { useLevel } from '../composables/useLevel'
 
-const { advanced } = useLevel()
+const { level } = useLevel()
 
 const counterLog = ref<string[]>([])
 const reactLog = ref<string[]>([])
@@ -59,7 +59,15 @@ function onReact(emoji: string, count: number) {
         testables en isolation.
       </ConceptCallout>
 
-      <ConceptCallout v-if="advanced" type="info" title="Sous le capot">
+      <ConceptCallout v-if="level !== 'beginner'" type="tip" title="Conventions de nommage">
+        Les événements s'écrivent en camelCase dans <code>defineEmits</code>
+        (<code>react</code>, <code>itemSelected</code>). Vue gère la correspondance
+        avec le kebab-case côté parent — <code>@item-selected</code> et
+        <code>@itemSelected</code> fonctionnent tous les deux. La convention actuelle
+        dans les projets Vue 3 est d'utiliser camelCase partout.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="level === 'experienced'" type="info" title="Sous le capot">
         <code>defineEmits&lt;T&gt;()</code> en TypeScript générique génère des
         validateurs runtime en dev — Vue vérifie que les événements émis
         correspondent aux déclarations. En production, le tree-shaker retire
@@ -103,7 +111,15 @@ function onReact(emoji: string, count: number) {
         impact sur le bundle.
       </ConceptCallout>
 
-      <ConceptCallout v-if="advanced" type="info" title="Typage côté parent">
+      <ConceptCallout v-if="level !== 'beginner'" type="tip" title="emit vs defineModel">
+        Règle pratique : utilise <code>defineModel</code> pour un état bidirectionnel
+        (input, toggle, valeur saisie). Utilise <code>emit</code> pour des actions
+        ponctuelles (clic de bouton, soumission, fin d'animation). La distinction :
+        <code>defineModel</code> représente un état synchronisé en permanence,
+        <code>emit</code> représente un événement qui s'est produit.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="level === 'experienced'" type="info" title="Typage côté parent">
         Quand tu écoutes <code>@change="handler"</code>, TypeScript infère
         automatiquement le type du paramètre de <code>handler</code> depuis les
         déclarations d'emits. Si tu renommes ou changes le type dans
@@ -148,7 +164,14 @@ function onReact(emoji: string, count: number) {
         <code>defineModel</code> fait exactement ça, mais compilé.
       </ConceptCallout>
 
-      <ConceptCallout v-if="advanced" type="info" title="defineModel sous le capot">
+      <ConceptCallout v-if="level !== 'beginner'" type="tip" title="Options de defineModel">
+        <code>defineModel</code> accepte des options : <code>{ required: true }</code>
+        pour forcer la présence du v-model, ou un transformateur pour normaliser la valeur :
+        <code>defineModel({ get: v =&gt; v.trim(), set: v =&gt; v.toLowerCase() })</code>.
+        Pratique pour nettoyer les inputs sans polluer le template.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="level === 'experienced'" type="info" title="defineModel sous le capot">
         <code>const model = defineModel&lt;string&gt;()</code> compile vers une prop
         <code>modelValue</code> + un emit <code>update:modelValue</code>. Le ref
         retourné est un <code>WritableComputedRef</code> — lire <code>model.value</code>

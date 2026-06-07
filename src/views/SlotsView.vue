@@ -8,7 +8,7 @@ import BaseCardSource from '../components/demos/slots/BaseCard.vue?raw'
 import ScopedListSource from '../components/demos/slots/ScopedList.vue?raw'
 import { useLevel } from '../composables/useLevel'
 
-const { advanced } = useLevel()
+const { level } = useLevel()
 
 const showHeader = ref(true)
 const showFooter = ref(true)
@@ -60,7 +60,14 @@ const statusLabels: Record<string, string> = {
         ça proprement : le parent injecte ce qu'il veut — texte, composants, HTML arbitraire.
       </ConceptCallout>
 
-      <ConceptCallout v-if="advanced" type="info" title="$slots guard">
+      <ConceptCallout v-if="level !== 'beginner'" type="tip" title="Contenu par défaut (fallback)">
+        Un slot peut avoir du contenu par défaut affiché si le parent ne fournit rien :
+        <code>&lt;slot name="header"&gt;Titre par défaut&lt;/slot&gt;</code>. Utile pour
+        les composants qui fonctionnent seuls mais acceptent des overrides. Le fallback
+        est rendu seulement si le slot correspondant est vide côté parent.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="level === 'experienced'" type="info" title="$slots guard">
         <code>$slots.header</code> est un objet qui contient les fonctions de rendu
         fournies par le parent. Il est <em>truthy</em> si le parent a déclaré un contenu
         pour ce slot, <em>falsy</em> sinon. Le pattern <code>v-if="$slots.header"</code>
@@ -125,7 +132,14 @@ const statusLabels: Record<string, string> = {
         comme <code>item</code> nuisent à la lisibilité.
       </ConceptCallout>
 
-      <ConceptCallout v-if="advanced" type="info" title="Compilation des slots scopés">
+      <ConceptCallout v-if="level !== 'beginner'" type="tip" title="Slot dynamique">
+        Le nom du slot peut être dynamique : <code>&lt;template #[nomDuSlot]&gt;</code>.
+        Pratique pour des composants de layout génériques qui reçoivent en prop le nom
+        de la zone à remplir. Exemple : un composant <code>&lt;PageLayout&gt;</code> qui
+        accepte <code>activeSection</code> pour décider quel slot rendre.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="level === 'experienced'" type="info" title="Compilation des slots scopés">
         Un slot scopé compile vers une fonction dans l'objet <code>slots</code> du composant :
         <code>slots.default?.({ item, index })</code>. L'enfant appelle cette fonction
         avec les données qu'il veut exposer et obtient en retour un tableau de VNodes.

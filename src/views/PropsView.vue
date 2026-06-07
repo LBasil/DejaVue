@@ -12,7 +12,7 @@ type Variant = 'success' | 'warning' | 'danger' | 'info'
 type Size = 'sm' | 'md' | 'lg'
 type Status = 'online' | 'away' | 'offline'
 
-const { advanced } = useLevel()
+const { level } = useLevel()
 
 const badgeVariant = ref<Variant>('success')
 const badgeSize = ref<Size>('md')
@@ -54,7 +54,14 @@ const statuses: { value: Status; label: string; color: string }[] = [
         Si toutes tes props sont required, <code>defineProps&lt;T&gt;()</code> seul suffit.
       </ConceptCallout>
 
-      <ConceptCallout v-if="advanced" type="info" title="Sous le capot">
+      <ConceptCallout v-if="level !== 'beginner'" type="tip" title="Props en lecture seule">
+        Modifier une prop directement génère un warning Vue : les props sont en lecture
+        seule dans l'enfant. Pour adapter une valeur localement, initialise une ref sur
+        la prop : <code>const localVariant = ref(props.variant)</code>. Pour refléter un
+        changement vers le parent, utilise un emit.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="level === 'experienced'" type="info" title="Sous le capot">
         <code>defineProps</code> est une macro compilée par le SFC compiler — elle
         n'existe pas dans le bundle final. Vue la transforme en options classiques :
         <code>props: { label: { type: String, required: true } }</code>. En dev,
@@ -118,7 +125,15 @@ const statuses: { value: Status; label: string; color: string }[] = [
         rendu, toujours. Facile à tester, facile à réutiliser n'importe où.
       </ConceptCallout>
 
-      <ConceptCallout v-if="advanced" type="info" title="Réactivité des props">
+      <ConceptCallout v-if="level !== 'beginner'" type="tip" title="withDefaults et les types complexes">
+        Pour les props de type <code>object</code> ou <code>array</code>,
+        <code>withDefaults</code> exige une factory function :
+        <code>default: () => []</code> et non <code>default: []</code>. Sans factory,
+        toutes les instances du composant partageraient la même référence d'objet —
+        modifier l'une modifierait toutes les autres.
+      </ConceptCallout>
+
+      <ConceptCallout v-if="level === 'experienced'" type="info" title="Réactivité des props">
         Chaque prop est automatiquement réactive via le système <code>Proxy</code> de
         Vue 3. Quand le parent change <code>name</code>, Vue détecte la modification,
         invalide le composant enfant dans le virtual DOM et re-render uniquement

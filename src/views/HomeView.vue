@@ -1,6 +1,26 @@
 <script setup lang="ts">
 const topics = [
   {
+    path: '/introduction',
+    label: 'Introduction',
+    icon: '▶',
+    color: '#42b883',
+    tagline: 'Concepts',
+    description:
+      'Réactivité, template, composants. Ce que Vue fait et pourquoi ça marche comme ça.',
+    tags: ['ref()', 'computed()', 'template'],
+  },
+  {
+    path: '/setup',
+    label: 'Mise en place',
+    icon: '⚙',
+    color: '#6366f1',
+    tagline: 'Démarrage',
+    description:
+      'Créer un projet Vite en trois commandes, comprendre la structure, anatomie d\'un SFC.',
+    tags: ['Vite', 'SFC', 'TypeScript'],
+  },
+  {
     path: '/props',
     label: 'Props',
     icon: '↓',
@@ -42,7 +62,7 @@ const topics = [
         Un carnet perso de patterns Vue 3 + TypeScript.<br />
         Des composants qui font quelque chose. Du code réel. Rien de fictif.
       </p>
-      <RouterLink to="/props" class="hero__cta">
+      <RouterLink to="/introduction" class="hero__cta">
         Commencer <span aria-hidden="true">→</span>
       </RouterLink>
     </header>
